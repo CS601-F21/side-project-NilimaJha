@@ -1,5 +1,5 @@
 from app import db
-from app.models import User, Post
+from app.models import User, Post, CryptoCoins
 
 
 def db_test():
@@ -55,3 +55,16 @@ def db_test():
     # for p in posts:
     #     db.session.delete(p)
     # db.session.commit()
+
+
+def insert_into_crypto_coins_table(coin_id, coin_name, coin_symbol):
+    # creating CryptoCoins object from data provided and inserting into crypto_coins table.
+    crypto_coins = CryptoCoins(coin_id=coin_id, coin_name=coin_name, coin_symbol=coin_symbol)
+    # db.session.add(crypto_coins)
+    # db.session.commit()
+
+    # crypto_coins = CryptoCoins.query.all()
+    print(crypto_coins)
+    print(crypto_coins.coin_id)
+    print(crypto_coins.coin_name)
+    print(crypto_coins.coin_symbol)
