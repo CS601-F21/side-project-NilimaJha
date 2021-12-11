@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db, render_as_batch=True)
 
 
-from app import routes, routes2, models, database_test
+from app import routes, routes2, add_new_coin, models, database_test
 
 
 
