@@ -14,15 +14,22 @@
         {% else %}
         <h1>Hello, Hope you are having a good day.</h1>
         {% endif %}
-        <div>
-            <form action="" method="post">
-                <p>
-                    {{ form.coin.label }}<br>
-                    {{ form.coin(size=32) }}<br>
-                    {% for error in form.username.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </p>
+        <div style="background-color:DodgerBlue;">
+            <br/><br/><br/>
+            <form method="post" action="#" novalidate>
+                {{ form.hidden_tag() }}
+                <label>
+                    <div>
+                        {{ form.coin.label }}<br>
+                    </div>
+                </label>
+                    <select {{ form.coin }} >
+                        {% for coin_name in coin_name_list %}
+                        <option value="{{ coin_name }}">{{ coin_name }}</option>
+                        {% endfor %}
+                    </select>
+                {{ form.submit() }}
+                <br/><br/><br/><br/>
             </form>
         </div>
     </body>

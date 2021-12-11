@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
+  <head>
+      <meta charset="UTF-8">
+      <script src='static/chart.min.js'></script>
+      {% if title %}
+      <title>{{ title }} - Side Project</title>
+      {% else %}
+      <title>Side Project</title>
+      {% endif %}
+  </head>
+  <body>
+    <div>
+        <p>SIDE Project Body</p>
+    </div>
+    <hr>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>-->
+    <h1> Heading of analysis_result page</h1>
+    <p><b>Coin Name :</b> {{ coin_name }}</p>
+    <p><b>Coin Symbol :</b> {{ coin_symbol }}</p>
+    <p><b>Coin Id :</b> {{ coin_id }}</p>
+    <hr/>
+    <canvas id="myChart" width="200" height="200"></canvas>
+    <p>
+<!--        {% for each_sentiment_score in all_sentiments_score %}-->
+<!--            {% for key, value in each_sentiment_score.items() %}-->
+<!--                {{key}} : {{value}}-->
+<!--                <br/>-->
+<!--            {% endfor %}-->
+<!--        <br/>-->
+<!--        {% endfor %}-->
+    </p>
+    <hr/>
+    <p>Overall sentiment of people towards {{ coin_name }} is {{ result_type }}</p>
 </body>
 </html>
