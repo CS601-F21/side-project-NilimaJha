@@ -23,7 +23,7 @@ class NewCoinForm(FlaskForm):
     submit = SubmitField('Add')
 
 
-class AdminLogin(FlaskForm):
+class AdminLoginForm(FlaskForm):
     name = StringField('Login As', validators=[DataRequired()])
     password = StringField('Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
