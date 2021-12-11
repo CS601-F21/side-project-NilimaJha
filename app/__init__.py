@@ -11,10 +11,12 @@ app = Flask(__name__)
 app.debug = True
 app.config.from_object(Config)
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, render_as_batch=True)
 
 
-from app import routes, routes2, models
+from app import routes, routes2, models, database_test
+
+
 
 
 # def __main__():
