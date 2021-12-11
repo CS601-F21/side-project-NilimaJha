@@ -4,12 +4,26 @@ from wtforms.validators import DataRequired
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    accessname = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Submit')
 
 
 class HomeForm(FlaskForm):
-    coin_name = StringField('Coin', validators=[DataRequired()])
-    submit = SubmitField('Analyze')
+    coin = StringField('Coin Name', validators=[DataRequired()])
+    submit = SubmitField('submit')
+
+
+class NewCoinForm(FlaskForm):
+    coin_name = StringField('Coin Name', validators=[DataRequired()])
+    coin_id = StringField('Coin ID', validators=[DataRequired()])
+    coin_symbol = StringField('Coin Symbol', validators=[DataRequired()])
+    confirm_data = BooleanField('Confirm Data', validators=[DataRequired(), ])
+    submit = SubmitField('Add')
+
+
+class AdminLogin(FlaskForm):
+    name = StringField('Login As', validators=[DataRequired()])
+    password = StringField('Password', validators=[DataRequired()])
+    submit = SubmitField('Submit')
