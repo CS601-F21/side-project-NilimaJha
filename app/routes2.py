@@ -1,9 +1,10 @@
-from flask import render_template, flash, redirect, url_for
+from urllib import request
+
+from flask import render_template, flash, redirect, url_for, request
 from app import app
-from app.form import LoginForm
+from app.database_test import insert_into_crypto_coins_table
+from app.form import LoginForm, NewCoinForm, AdminLogin, AdminLoginForm
 from app.form import HomeForm
-from flask import Flask
-from requests_oauthlib.oauth1_auth import Client
 
 
 # @app.route('/users_post')
@@ -46,18 +47,20 @@ from requests_oauthlib.oauth1_auth import Client
 #     return render_template('users_post.html', user=user, posts=posts)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/listlog', methods=['GET', 'POST'])
+def login1():
     form = LoginForm()
+    # get data from db make alist of it and then send it to the form.
+    namelist = ['a', 'b', 'c', 'd']
     if form.validate_on_submit():
         flash('Login requested for user {}, remember_me={}'.format(
             form.username.data, form.remember_me.data))
         return redirect(url_for('index'))
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, namelist=namelist)
 
 
-@app.route('/home', methods=['GET', 'POST'])
-def home():
+@app.route('/home1', methods=['GET', 'POST'])
+def home1():
     form = HomeForm()
     if form.validate_on_submit():
         flash('Login requested for user {}, remember_me={}'.format(
@@ -65,3 +68,41 @@ def home():
         return redirect(url_for('index'))
     return render_template('home.html', title='Home', form=form)
 
+
+@app.route('/printname', methods=['GET', 'POST'])
+def printingList():
+    form = HomeForm()
+    coin_name_list = ['a', 'bbbbb', 'cccccccccccccccc', 'ddddddddddddddxddddddddddddddd']
+    print(coin_name_list)
+    if form.validate_on_submit():
+        data = request.form['coin']
+        print(data)
+        return 'index.html'
+    return render_template('home.html', title='Home Trying Drop-Down', coin_name_list=coin_name_list, form=form)
+
+
+@app.route('/add_new_coin', methods=['GET', 'POST'])
+def add_new_coin_form():
+    form = AdminLoginForm()
+    if form.validate_on_submit():
+        print(request.form['name'])
+        return redirect(url_for('add_new_coin', admin=request.form['name'], password=request.form['password']))
+    return render_template('login.html', title='Add New Coin', form=form)
+
+
+@app.route('/add_new_coin/<admin>/<password>')
+def add_new_coin(admin, password):
+    form = NewCoinForm()
+    if form.validate_on_submit():
+        print("Got a submit.")
+        print(request.form['coin_name'])
+        print(request.form['coin_id'])
+        print(request.form['confirm_data'])
+        # validate data , check if the data already exist in db if yes return invalid data else add in db
+        # and return success page.
+        insert_into_crypto_coins_table(coin_id=request.form['coin_id'], coin_name=request.form['coin_name'], coin_symbol=request.form['coin_symbol'])
+        return render_template('Successful.html')
+    if admin == '@dm!n' and password == "p@ssw0rd":
+        return render_template('add_new_coin.html', title='Add New Coin', form=form)
+    else:
+        return render_template('not_Authorized.html')

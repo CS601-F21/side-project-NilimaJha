@@ -1,22 +1,22 @@
 from flask import render_template
 from app import app
-import app.helper as h
+
 from app.database_test import db_test
 import requests
 import json
 import re
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
-import numpy
-import pandas
-# import matplotlib.pyplot as plt
+#
+# import numpy
+# import pandas
+# # import matplotlib.pyplot as plt
 
 from config import Config
 
 
 @app.route('/home')
 def home():
-    user = {'username': h.gadha()}
+    user = {'username': 'name'}
     return render_template('index.html', title='Home', user=user)
 
 
@@ -106,14 +106,23 @@ def index():
     #     print(i['text'])
     # cleaning data
 
+    all_sentiments_score_list = []
+
     for i in tweets['data']:
         print(">>>>>>>:::::::>>>>>>>:::::::")
-        # print(i['text'])
-        # print("??????????????")
         print(clean_tweets(i['text']))
-        sentiment_scores(i['text'])
-
-    return "Hello from Index!"
+        all_sentiments_score_list.append(sentiment_scores(i['text']))
+    overall_sentiment_percentage = find_overall_sentiment_score_percentage(all_sentiments_score_list)
+    if overall_sentiment_percentage['positive_percentage'] > overall_sentiment_percentage['negative_percentage']:
+        result_type = 'Positive'
+    elif overall_sentiment_percentage['negative_percentage'] > overall_sentiment_percentage['positive_percentage']:
+        result_type = 'Negative'
+    else:
+        result_type = "Neutral"
+    print(overall_sentiment_percentage['positive_percentage'])
+    print(overall_sentiment_percentage['negative_percentage'])
+    print(overall_sentiment_percentage['neutral_percentage'])
+    return render_template('analysis_result.html', title='Analysis Result', overall_sentiment_percentage=overall_sentiment_percentage, coin_name="Bitcoin", coin_symbol='BTC', coin_id='bitcoin', result_type=result_type)
 
 
 def clean_tweets(each_tweet):
@@ -147,11 +156,41 @@ def sentiment_scores(sentence):
 
     # decide sentiment as positive, negative and neutral
     if sentiment_dict['compound'] >= 0.05:
+        sentiment_dict['over_all'] = 'Positive'
         print("Positive")
 
     elif sentiment_dict['compound'] <= - 0.05:
+        sentiment_dict['over_all'] = 'Negative'
         print("Negative")
 
     else:
+        sentiment_dict['over_all'] = 'Neutral'
         print("Neutral")
+
+    return sentiment_dict
+
+
+def find_overall_sentiment_score_percentage(all_sentiments_score):
+    total_positive = 0
+    total_negative = 0
+    total_neutral = 0
+
+    for each_sentiment_score in all_sentiments_score:
+        if each_sentiment_score['over_all'] == 'Positive':
+            total_positive = total_positive + 1
+        elif each_sentiment_score['over_all'] == 'Negative':
+            total_negative = total_negative + 1
+        else:
+            total_neutral = total_neutral + 1
+
+    positive_percentage = sentiment_percentage_calculator(len(all_sentiments_score), total_positive)
+    negative_percentage = sentiment_percentage_calculator(len(all_sentiments_score), total_negative)
+    neutral_percentage = sentiment_percentage_calculator(len(all_sentiments_score), total_neutral)
+    sentiment_percentage = {'positive_percentage': positive_percentage, 'negative_percentage': negative_percentage, 'neutral_percentage': neutral_percentage}
+    return sentiment_percentage
+
+
+def sentiment_percentage_calculator(total_input, total_one_type):
+    percentage = (total_one_type * 100)/ total_input
+    return percentage
 
