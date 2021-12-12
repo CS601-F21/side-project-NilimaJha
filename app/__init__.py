@@ -6,22 +6,23 @@ from flask_migrate import Migrate
 # from flask_restful import Api
 # import tweepy
 
-
 app = Flask(__name__)
-app.debug = True
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db, render_as_batch=True)
 
 
-from app import routes, routes2, add_new_coin, models, database_test
+from app import models, data_analysis_ops, routes, home, add_new_coin, database_ops
 
 
 
 
 # def __main__():
 #     print("*" * 80)
-#     print("in main")
+#     if 'abc' == 'Abc':
+#         print("True")
+#     else:
+#         print("False")
 #
 #     print("*" * 80)
 #
