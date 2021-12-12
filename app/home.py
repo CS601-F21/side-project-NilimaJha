@@ -1,7 +1,7 @@
 from urllib import request
 from flask import render_template, flash, redirect, url_for, request
 from app import app
-from app.database_test import get_coin_name_list_from_db
+from app.database_ops import get_coin_name_list_from_db
 from app.forms import HomeForm
 
 
