@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
 
-from app.database_test import get_coin_id_list_from_db
+from app.database_ops import get_coin_id_list_from_db
 
 
 # class LoginForm(FlaskForm):
@@ -28,9 +28,7 @@ def validate_coin_name(form, field):
 
 # Form class for the form to add new coin in the data base
 class NewCoinForm(FlaskForm):
-    coin_name = StringField('Coin Name', validators=[DataRequired()])
     coin_id = StringField('Coin ID', validators=[DataRequired(), validate_coin_name])
-    coin_symbol = StringField('Coin Symbol', validators=[DataRequired()])
     confirm_data = BooleanField('Confirm Data', validators=[DataRequired(), ])
     submit = SubmitField('Add')
 
