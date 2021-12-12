@@ -23,18 +23,20 @@ def search_for_recent_tweets(search_term, max_result):
 
     print(">> Call : " + url)
 
-    return get_tweets_from_file("bitcoin_reviews.json")
-
+    # Making the twitter v2 API calls to get recent tweets
     # response = requests.request("GET", url, headers=headers)
     # print(response.status_code)
     # if response.status_code != 200:
-    #     print("ERROR : Twitter API call failed")
+    #     print("ERROR : Twitter API call Failed")
     #     print("ERROR : response.status_code : {} \n -> response.text: {}"
     #           .format(response.status_code, response.text))
     #     # raise Exception(response.status_code, response.text)
     #     return render_template('tweet_search_failure.html')
     #
     # return response.json()
+
+    # UnComment For Ignoring calls and reading from the Dummy dataset files
+    return get_tweets_from_file("crptocoin_tweets.json")
 
 
 def get_tweets_from_file(file_name):
@@ -58,25 +60,25 @@ def sentiment_scores(sentence):
     # which contains pos, neg, neu, and compound scores.
     sentiment_dict = sid_obj.polarity_scores(sentence)
 
-    print("Overall sentiment dictionary is : ", sentiment_dict)
-    print("sentence was rated as ", sentiment_dict['neg'] * 100, "% Negative")
-    print("sentence was rated as ", sentiment_dict['neu'] * 100, "% Neutral")
-    print("sentence was rated as ", sentiment_dict['pos'] * 100, "% Positive")
-
-    print("Sentence Overall Rated As", end=" ")
+    # print("Overall sentiment dictionary is : ", sentiment_dict)
+    # print("sentence was rated as ", sentiment_dict['neg'] * 100, "% Negative")
+    # print("sentence was rated as ", sentiment_dict['neu'] * 100, "% Neutral")
+    # print("sentence was rated as ", sentiment_dict['pos'] * 100, "% Positive")
+    #
+    # print("Sentence Overall Rated As", end=" ")
 
     # decide sentiment as positive, negative and neutral
     if sentiment_dict['compound'] >= 0.05:
         sentiment_dict['over_all'] = 'Positive'
-        print("Positive")
+        # print("Positive")
 
     elif sentiment_dict['compound'] <= - 0.05:
         sentiment_dict['over_all'] = 'Negative'
-        print("Negative")
+        # print("Negative")
 
     else:
         sentiment_dict['over_all'] = 'Neutral'
-        print("Neutral")
+        # print("Neutral")
 
     return sentiment_dict
 
@@ -123,3 +125,22 @@ def clean_tweets(each_tweet):
     # print("\nAfter Cleaning :" + each_tweet)
     return each_tweet
 
+
+def run_sentiments(final_tweet_list):
+    all_sentiments_score_list = []
+    for each_tweet in final_tweet_list:
+        all_sentiments_score_list.append(sentiment_scores(each_tweet))
+
+    sentiment_percentage = find_overall_sentiment_score_percentage(all_sentiments_score_list)
+
+    if sentiment_percentage['positive_percentage'] > sentiment_percentage['negative_percentage']:
+        overall_sentiment = 'Positive'
+    elif sentiment_percentage['negative_percentage'] > sentiment_percentage['positive_percentage']:
+        overall_sentiment = 'Negative'
+    else:
+        overall_sentiment = "Neutral"
+    print("positive : {}% ".format(sentiment_percentage['positive_percentage']))
+    print("negative : {}% ".format(sentiment_percentage['negative_percentage']))
+    print("neutral  : {}% ".format(sentiment_percentage['neutral_percentage']))
+
+    return overall_sentiment, sentiment_percentage
