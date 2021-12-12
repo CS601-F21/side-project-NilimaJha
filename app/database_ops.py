@@ -1,5 +1,5 @@
 from app import db
-from app.models import User, Post, CryptoCoins, Tags
+from app.models import CryptoCoins, Tags
 
 
 def insert_into_crypto_coins_table(coin_id, coin_name, coin_symbol):
@@ -59,5 +59,22 @@ def insert_into_tags_table(tag, coin):
     db.session.commit()
     tag_lists = Tags.query.all()
     print(tag_lists)
+
+
+def get_tags_for_coin(coin_name):
+    coin_id, coin_name, coin_symbol = get_coin_details(coin_name)
+    print("coin_id = " + coin_id)
+
+    coin_tag_details = Tags.query.filter_by(coin_id=coin_id).all()
+    crypto_tag_list = []
+    for each in coin_tag_details:
+        crypto_tag_list.append(each.coin_tag)
+
+    return crypto_tag_list
+
+
+def get_coin_details(coin_name):
+    coin_details = CryptoCoins.query.filter_by(coin_name=coin_name).first()
+    return coin_details.coin_id, coin_details.coin_name, coin_details.coin_symbol
 
 
