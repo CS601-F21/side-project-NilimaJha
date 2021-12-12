@@ -5,7 +5,7 @@
         {% if title %}
         <title>{{ title }} - Side Project</title>
         {% else %}
-        <title>Side Project</title>
+        <title>Side Project - Add NEW Coins </title>
         {% endif %}
     </head>
     <body>
@@ -14,23 +14,9 @@
         <form action="#" method="post">
             {{ form.hidden_tag() }}
             <p>
-                {{ form.coin_name.label }}<br>
-                {{ form.coin_name(size=32) }}
-                {% for error in form.coin_name.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-            <p>
                 {{ form.coin_id.label }}<br>
                 {{ form.coin_id(size=20) }}
                 {% for error in form.coin_id.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-            <p>
-                {{ form.coin_symbol.label }}<br>
-                {{ form.coin_symbol(size=20) }}
-                {% for error in form.coin_symbol.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
