@@ -23,20 +23,20 @@ def search_for_recent_tweets(search_term, max_result):
 
     print(">> Call : " + url)
 
-    # Making the twitter v2 API calls to get recent tweets
-    # response = requests.request("GET", url, headers=headers)
-    # print(response.status_code)
-    # if response.status_code != 200:
-    #     print("ERROR : Twitter API call Failed")
-    #     print("ERROR : response.status_code : {} \n -> response.text: {}"
-    #           .format(response.status_code, response.text))
-    #     # raise Exception(response.status_code, response.text)
-    #     return render_template('tweet_search_failure.html')
-    #
-    # return response.json()
+    ####Making the twitter v2 API calls to get recent tweets
+    response = requests.request("GET", url, headers=headers)
+    print(response.status_code)
+    if response.status_code != 200:
+        print("ERROR : Twitter API call Failed")
+        print("ERROR : response.status_code : {} \n -> response.text: {}"
+              .format(response.status_code, response.text))
+        # raise Exception(response.status_code, response.text)
+        return render_template('tweet_search_failure.html')
 
-    # UnComment For Ignoring calls and reading from the Dummy dataset files
-    return get_tweets_from_file("crptocoin_tweets.json")
+    return response.json()
+
+    # # UnComment For Ignoring calls and reading from the Dummy dataset files
+    # return get_tweets_from_file("crptocoin_tweets.json")
 
 
 def get_tweets_from_file(file_name):
@@ -70,15 +70,10 @@ def sentiment_scores(sentence):
     # decide sentiment as positive, negative and neutral
     if sentiment_dict['compound'] >= 0.05:
         sentiment_dict['over_all'] = 'Positive'
-        # print("Positive")
-
     elif sentiment_dict['compound'] <= - 0.05:
         sentiment_dict['over_all'] = 'Negative'
-        # print("Negative")
-
     else:
         sentiment_dict['over_all'] = 'Neutral'
-        # print("Neutral")
 
     return sentiment_dict
 
@@ -115,6 +110,7 @@ def extract_texts(search_result):
     return text_list
 
 
+# Method to clean the tweets extracted from the Twitter.
 def clean_tweets(each_tweet):
     # print("Not Cleaned :" + each_tweet)
     each_tweet = re.sub('#', ' ', each_tweet)
@@ -144,3 +140,37 @@ def run_sentiments(final_tweet_list):
     print("neutral  : {}% ".format(sentiment_percentage['neutral_percentage']))
 
     return overall_sentiment, sentiment_percentage
+
+
+def top_trending_searched_coins():
+    top_searched_coins = []
+    get_top_searched_api_url = "https://api.coingecko.com/api/v3/search/trending"
+    response = requests.request("GET", get_top_searched_api_url)
+
+    app.logger.info(response.status_code)
+    if response.status_code != 200:
+        app.logger.info("ERROR : Top Trending Searched Coins details Couldn't be collected from CoinGecko API")
+        return top_searched_coins
+
+    response_data = response.json()
+    for each in response_data['coins']:
+        top_searched_coins.append(each['item']['id'])
+
+    return top_searched_coins
+
+
+def get_coin_current_market_price(coin_id):
+    url ="https://api.coingecko.com/api/v3/coins/{}".format(coin_id)
+
+    current_market_price = "UNKNOWN"
+
+    response = requests.request("GET", url)
+
+    app.logger.info(response.status_code)
+    if response.status_code != 200:
+        app.logger.info("ERROR : Top Trending Searched Coins details Couldn't be collected from CoinGecko API")
+        return current_market_price
+
+    response_data = response.json()
+
+    return response_data['market_data']['current_price']['usd']
