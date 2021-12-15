@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base_template.html" %}
+
+{% block content %}
+        <br/><br/>
+        {% if greetings %}
+        <h1>{{greetings.greeting}}</h1>
+        {% else %}
+        <h1>Welcome , Hope You are Having a Great day !!! .</h1>
+
+        {% endif %}
+        <div class="result">
+            <br/><br/>
+            <h2> Tag {{ coin_tag }} Successfully Added for coin ID {{ coin_id }}!!! </h2>
+            <br/>
+            <span><a href="/add_new_tag">Add New Tag</a></span>
+            <span><a href="/home">Home</a></span>
+        </div>
+{% endblock %}

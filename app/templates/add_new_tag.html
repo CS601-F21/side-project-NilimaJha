@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base_template.html" %}
+
+{% block content %}
+        <div>
+            <h1>Please enter coin id and tag:</h1>
+            <form action="#" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.coin_id.label }}<br>
+                    {{ form.coin_id(size=20) }}
+                    {% for error in form.coin_id.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.coin_tag.label }}<br>
+                    {{ form.coin_tag(size=25) }}
+                    {% for error in form.coin_tag.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
+        </div>
+        <hr>
+        <div>
+        <a href="/home">Home</a>
+    </div>
+{% endblock %}

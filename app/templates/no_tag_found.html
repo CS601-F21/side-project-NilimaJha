@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base_template.html" %}
+
+{% block content %}
+        <div class="result">
+            <br/><br/>
+            <h2> Coin {{ coin_name }} does not have any Search Tag associated. Please enter Search Tag first !!! </h2>
+            <br/>
+            <span><a href="/add_new_tag" style="margin-right:10px">Add New Tag</a></span>
+            <span><a href="/home" style="margin-right:10px">Home</a></span>
+        </div>
+{% endblock %}
