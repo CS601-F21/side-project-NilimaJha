@@ -1,7 +1,10 @@
+from app import app
 from app import db
 from app.models import CryptoCoins, Tags
 
 
+# method to perform insertion in DB table.
+# returns true if data is valid and entered in to db and false otherwise.
 def insert_into_crypto_coins_table(coin_id, coin_name, coin_symbol):
     crypto_coins = CryptoCoins.query.all()
     for each_crypto_coins in crypto_coins:
@@ -24,20 +27,22 @@ def insert_into_crypto_coins_table(coin_id, coin_name, coin_symbol):
 
     # printing all the entry of the crypto_coins table for testing purpose
     crypto_coins = CryptoCoins.query.all()
-    print(crypto_coins)
+    app.logger.debug(crypto_coins)
     for each_crypto_coins in crypto_coins:
-        print(">>>>>>>>>>>>>>>>>>>>>>>")
-        print(each_crypto_coins)
-        print(each_crypto_coins.coin_id)
-        print(">>>>>>>>>>>>>>>>>>>>>>>")
+        app.logger.debug(">>>>>>>>>>>>>>>>>>>>>>>")
+        app.logger.debug(each_crypto_coins)
+        app.logger.debug(each_crypto_coins.coin_id)
+        app.logger.debug(">>>>>>>>>>>>>>>>>>>>>>>")
     return True
 
 
+# method to get all data from crypto_coins table.
 def get_data_from_crypto_currency():
     crypto_coins = CryptoCoins.query.all()
     return crypto_coins
 
 
+# method to get coin_id of all the coin in the db.
 def get_coin_id_list_from_db():
     all_data = get_data_from_crypto_currency()
     coin_ids_list = []
@@ -46,6 +51,7 @@ def get_coin_id_list_from_db():
     return coin_ids_list
 
 
+# method to get all coin's name from db.
 def get_coin_name_list_from_db():
     all_data = get_data_from_crypto_currency()
     coin_name_list = []
@@ -54,21 +60,20 @@ def get_coin_name_list_from_db():
     return coin_name_list
 
 
+# method to add new tag into db.
 def insert_into_tags_table(tag, coin):
-    # tag_entry = Tags(associated_tags=coin, coin_tag=tag)
-    # db.session.add(tag_entry)
-
     tag = Tags(coin_id=coin, coin_tag=tag)
     db.session.add(tag)
     db.session.commit()
 
     tag_lists = Tags.query.all()
-    print(tag_lists)
+    app.logger.debug(tag_lists)
 
 
+# method to add all the tags associated with a coin_id in the tags table of the db.
 def get_tags_for_coin(coin_name):
     coin_id, coin_name, coin_symbol = get_coin_details(coin_name)
-    print("coin_id = " + coin_id)
+    app.logger.debug("coin_id = " + coin_id)
 
     coin_tag_details = Tags.query.filter_by(coin_id=coin_id).all()
     crypto_tag_list = []
@@ -79,6 +84,7 @@ def get_tags_for_coin(coin_name):
     return crypto_tag_list
 
 
+# method to get all the details of any given coin from the db.
 def get_coin_details(coin_name):
     coin_details = CryptoCoins.query.filter_by(coin_name=coin_name).first()
     return coin_details.coin_id, coin_details.coin_name, coin_details.coin_symbol
@@ -132,11 +138,11 @@ def process_delete_coin(coin_id):
         tag = Tags.query.filter_by(coin_id=coin_id, coin_tag=coin_tag).first()
         db.session.delete(tag)
         db.session.commit()
-        print("one tag deleted")
+        app.logger.debug("one tag deleted")
     crypto_coins = CryptoCoins.query.filter_by(coin_id=coin_id).first()
     db.session.delete(crypto_coins)
     db.session.commit()
-    print("one coin deleted.")
+    app.logger.debug("one coin deleted.")
 
 
 

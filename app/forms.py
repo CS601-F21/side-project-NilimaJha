@@ -6,14 +6,7 @@ from wtforms.validators import DataRequired, ValidationError
 from app.database_ops import get_coin_id_list_from_db
 
 
-# class LoginForm(FlaskForm):
-#     accessname = StringField('Username', validators=[DataRequired()])
-#     password = PasswordField('Password', validators=[DataRequired()])
-#     remember_me = BooleanField('Remember Me')
-#     submit = SubmitField('Submit')
-
-
-# Form class for the form on the home page i.e to select coin for sentiment analysis.
+# Form class for the form on the home page i.e. to select coin for sentiment analysis.
 class HomeForm(FlaskForm):
     coin = StringField('Please Choose a Coin Name: ', validators=[DataRequired()])
     submit = SubmitField('Analyse Tweets!')

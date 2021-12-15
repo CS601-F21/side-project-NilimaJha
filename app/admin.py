@@ -10,43 +10,42 @@ from config import Config
 import requests
 
 
+# method to handle GET and POST request for admin login
+# This feature is not implemented yet.
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     form = AdminLoginForm()
     if form.validate_on_submit():
-        app.logger.info(request.form['name'])
+        app.logger.debug(request.form['name'])
         return redirect(url_for('add_new_coin', admin=request.form['name'], password=request.form['password']))
     return render_template('login.html', title='Admin Login', form=form)
 
 
+# method to handle GET and POST request to add_new_coin request by the user.
 @app.route('/add_new_coin/<admin>/<password>', methods=['GET', 'POST'])
 def add_new_coin(admin, password):
     form = NewCoinForm()
     if form.validate_on_submit():
-        app.logger.info("Got a submit.")
-        app.logger.info(request.form)
-        # print(request.form['coin_id'])
-        # print(request.form['confirm_data'])
-        # validate data , check if the data already exist in db if yes return invalid data else add in db
-
+        app.logger.debug("Got a submit.")
+        app.logger.debug(request.form)
         get_coin_by_id_url = "https://api.coingecko.com/api/v3/coins/{}?localization=en&tickers=false&community_data=false"\
             .format(request.form['coin_id'])
 
         response = requests.request("GET", get_coin_by_id_url)
-        app.logger.info(response.status_code)
+        app.logger.debug(response.status_code)
         if response.status_code != 200:
-            app.logger.info("ERROR : COIN ID: {} -> Details not available on CoinGecko"
+            app.logger.debug("ERROR : COIN ID: {} -> Details not available on CoinGecko"
                   .format(request.form['coin_id']))
-            app.logger.info("ERROR : response.status_code : {} \n -> response.text: {}"
+            app.logger.debug("ERROR : response.status_code : {} \n -> response.text: {}"
                   .format(response.status_code, response.text))
             # raise Exception(response.status_code, response.text)
             flash("ALERT: Invalid Coin! \"{}\" Details Couldn't be collected from CoinGecko API".format(request.form['coin_id']))
             return redirect(url_for('add_new_coin', admin=admin, password=password))
 
         response_data = response.json()
-        app.logger.info(">> coin_id     : " + str(response_data['id']))
-        app.logger.info(">> coin_symbol : " + str(response_data['symbol']))
-        app.logger.info(">> coin_name   : " + str(response_data['name']))
+        app.logger.debug(">> coin_id     : " + str(response_data['id']))
+        app.logger.debug(">> coin_symbol : " + str(response_data['symbol']))
+        app.logger.debug(">> coin_name   : " + str(response_data['name']))
 
         # and return success page.
         coin_inserted = insert_into_crypto_coins_table(coin_id=response_data['id'],
@@ -64,24 +63,24 @@ def add_new_coin(admin, password):
     else:
         flash("ALERT: Invalid Login Credentials.")
         return redirect(url_for('admin_login'))
-        # return render_template('not_Authorized.html')
 
 
+# method to handle GET and POST request to add new tags for a coin in the database
 @app.route('/add_new_tag', methods=['GET', 'POST'])
 def add_new_tag():
     form = NewTagForm()
     if form.validate_on_submit():
-        app.logger.info("Got a submit.")
-        app.logger.info(request.form)
+        app.logger.debug("Got a submit.")
+        app.logger.debug(request.form)
         tag_insertion = process_insert_tag(request.form['coin_id'], request.form['coin_tag'])
         if tag_insertion:
-            app.logger.info('insertion successful page')
+            app.logger.debug('insertion successful page')
             return render_template('new_tag_added.html',
                                    title='New Tag Added',
                                    coin_id=request.form['coin_id'],
                                    coin_tag=request.form['coin_tag'])
         else:
-            app.logger.info('tag entered already exist')
+            app.logger.debug('tag entered already exist')
             return render_template('tag_already_exist.html',
                                    title='Tag Already Exist',
                                    coin_id=request.form['coin_id'],
@@ -89,6 +88,7 @@ def add_new_tag():
     return render_template('add_new_tag.html', title='Add New Tag', form=form)
 
 
+# method to handle GET and POST request for remove tag by the user.
 @app.route('/remove_tag', methods=['GET', 'POST'])
 def remove_tag():
     form = RemoveTagForm()
@@ -107,6 +107,7 @@ def remove_tag():
     return render_template('remove_tag.html', title='Remove Tag', form=form)
 
 
+# method to handle GET and POST request for deleting coin from the db.
 @app.route('/delete_coin', methods=['GET', 'POST'])
 def delete_coin():
     form = DeleteTagForm()
