@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        {% if title %}
-        <title>{{ title }} - Side Project</title>
-        {% else %}
-        <title>Side Project - Add NEW Coins </title>
-        {% endif %}
-    </head>
-    <body>
+{% extends "base_template.html" %}
+
+{% block content %}
         <div>
         <h1>Please enter valid information for the following field:</h1>
         <form action="#" method="post">
             {{ form.hidden_tag() }}
             <p>
-                {{ form.coin_id.label }}<br>
+                {{ form.coin_id.label }} :
                 {{ form.coin_id(size=20) }}
                 {% for error in form.coin_id.errors %}
                 <span style="color: red;">[{{ error }}]</span>
@@ -30,5 +22,5 @@
         </form>
         </div>
         <hr>
-    </body>
-</html>
+        <a href="/home">Home</a>
+{% endblock %}

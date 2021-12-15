@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base_template.html" %}
+
+{% block content %}
+        <br/><br/>
+        <div class="result">
+            <br/><br/>
+            <h2> Coin with coin id {{ coin_id }} successfully removed!!! </h2>
+            <br/>
+            <span><a href="/home" style="margin-right:10px">Home</a></span>
+        </div>
+{% endblock %}
