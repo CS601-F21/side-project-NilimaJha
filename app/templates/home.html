@@ -1,21 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        {% if title %}
-        <title>{{title}}</title>
-        {% else %}
-        <title>Default Title.</title>
-        {% endif %}
-    </head>
-    <body>
+{% extends "base_template.html" %}
+
+{% block content %}
+        <br/>
         {% if greetings %}
         <h1>{{greetings.greeting}}</h1>
         {% else %}
-        <h1>Hello, Hope you are having a good day.</h1>
+        <h1>Welcome , Hope You are Having a Great day !!! .</h1>
+
         {% endif %}
-        <div style="background-color:DodgerBlue;">
-            <br/><br/><br/>
+        <div class="search">
+            <hr/>
+            <h2> Get The current twitter Sentiments on the available Crypto Coins !!! </h2>
+            <br/>
             <form method="post" action="#" novalidate>
                 {{ form.hidden_tag() }}
                 <label>
@@ -29,8 +25,24 @@
                         {% endfor %}
                     </select>
                 {{ form.submit() }}
-                <br/><br/><br/><br/>
+                <br/><br/>
             </form>
         </div>
-    </body>
-</html>
+
+        <hr/>
+        <div class="topsearched">
+            <h2>Top Trending coins on CoinGecko in the last 24 hours</h2>
+            <ol>
+                {% for coin in top_searched_coins %}
+                <li>{{ coin }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <hr/>
+        <span><a href="/add_new_coin/@dm!n/p@ssw0rd" style="margin-right:10px">Add New Coin</a></span>
+        <span><a href="/add_new_tag" style="margin-right:10px">Add New Tag</a></span>
+        <span><a href="/remove_tag" style="margin-right:10px">Delete Tag</a></span>
+        <span><a href="/delete_coin" style="margin-right:10px">Delete Coin</a></span>
+        <hr/>
+{% endblock %}
