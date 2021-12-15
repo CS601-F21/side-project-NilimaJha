@@ -1,16 +1,17 @@
 from urllib import request
 
 from app import app
-from app.database_ops import insert_into_crypto_coins_table
+from app.database_ops import insert_into_crypto_coins_table, process_insert_tag
 from flask import render_template, redirect, url_for, request
-from app.forms import AdminLoginForm, NewCoinForm
+from app.forms import AdminLoginForm, NewCoinForm, NewTagForm
 from config import Config
 
 import requests
 import json
 
-@app.route('/add_new_coin', methods=['GET', 'POST'])
-def add_new_coin_form():
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin_login():
     form = AdminLoginForm()
     if form.validate_on_submit():
         print(request.form['name'])
@@ -61,3 +62,21 @@ def add_new_coin(admin, password):
         return render_template('add_new_coin.html', title='Add New Coin', form=form)
     else:
         return render_template('not_Authorized.html')
+
+
+@app.route('/add_new_tag', methods=['GET', 'POST'])
+def add_new_tag(admin, password):
+    form = NewTagForm()
+    if form.validate_on_submit():
+        print("Got a submit.")
+        print(request.form)
+        tag_insertion = process_insert_tag(request.form['coin_id'], request.form['coin_tag'])
+        if tag_insertion:
+            print('insertion successful page')
+            #  insertion successful page
+        else:
+            print('tag entered already exist')
+            #  tag entered already exist
+    return render_template('add_new_tag.html', title='Add New Tag', form=form)
+
+
