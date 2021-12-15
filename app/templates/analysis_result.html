@@ -1,36 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <script src='static/chart.min.js'></script>
-      {% if title %}
-      <title>{{ title }} - Side Project</title>
-      {% else %}
-      <title>Side Project</title>
-      {% endif %}
-  </head>
-  <body>
-    <div>
-        <p>SIDE Project Body</p>
-    </div>
-    <hr>
+{% extends "base_template.html" %}
+
+{% block content %}
+    </br>
 <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>-->
-    <h1> Heading of analysis_result page</h1>
-    <p><b>Coin Name :</b> {{ coin_name }}</p>
-    <p><b>Coin Symbol :</b> {{ coin_symbol }}</p>
-    <p><b>Coin Id :</b> {{ coin_id }}</p>
+    <div class="coin_info">
+        <tr>
+            <td><b>Coin Name   :</b></td>
+            <td>{{ coin_name }}</td>
+        </tr></br>
+        <tr>
+            <td><b>Coin Name   :</b></td>
+            <td>{{ coin_symbol }}</td>
+        </tr></br>
+        <tr>
+            <td><b>Coin Id     :</b></td>
+            <td>{{ coin_id }}</td>
+        </tr></br>
+        <tr>
+            <td><b>Current Market Price     :</b></td>
+            <td>$ {{ coin_current_price }} USD</td>
+        </tr></br>
+
+    </div>
     <hr/>
-    <canvas id="myChart" width="200" height="200"></canvas>
-    <p>
-<!--        {% for each_sentiment_score in all_sentiments_score %}-->
-<!--            {% for key, value in each_sentiment_score.items() %}-->
-<!--                {{key}} : {{value}}-->
-<!--                <br/>-->
-<!--            {% endfor %}-->
-<!--        <br/>-->
-<!--        {% endfor %}-->
-    </p>
+    <div class="banner">
+        Overall sentiment of people towards
+        <strong>{{ coin_name }}</strong> is
+        <strong>
+            {% if result_type == "Positive" %}
+            <p style="color:green;">
+            {% elif result_type == "Negative" %}
+            <p style="color:red;">
+            {% else %}
+            <p style="color:blue;">
+            {% endif %}
+            {{ result_type }}
+            </p>
+
+        </strong>
+    </div>
     <hr/>
-    <p>Overall sentiment of people towards {{ coin_name }} is {{ result_type }}</p>
-</body>
-</html>
+    <dev>
+        <div style = "text-align:center;">
+            <canvas id="myChart" style="width:200%;max-width:500px"></canvas>
+            <script>
+                var xValues = ["Positive", "Negative", "Neutral"];
+                var yValues = [{{ positive }}, {{ negative }}, {{ neutral }}];
+                var barColors = [
+                  "#2ECC71",
+                  "#E74C3C",
+                  "#5DADE2"
+                ];
+
+                new Chart("myChart", {
+                  type: "doughnut",
+                  data: {
+                    labels: xValues,
+                    datasets: [{
+                      backgroundColor: barColors,
+                      data: yValues
+                    }]
+                  },
+                  options: {
+                    title: {
+                      display: true,
+                      text: "Twitter sentiment towards {{ coin_name }}"
+                    }
+                  }
+                });
+            </script>
+        </div>
+    </dev>
+{% endblock %}
