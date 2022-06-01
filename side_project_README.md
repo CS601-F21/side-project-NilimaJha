@@ -1,7 +1,7 @@
 #########################
 #  Current Features
 #########################
-1. Analye Sentimeint od Peoeple (On Twitter) towards a given Coin based on the Tags associated for thart coin
+1. Analye Sentimeint of People (On Twitter) towards a given Coin based on the Tags associated for thart coin
 	- Display Sentimeint analysis results in chart on the UI
 2. Get and display Top Trending coins on CoinGecko in the last 24 hours 
 3. Provide User option to Add a Coin to the Coin List
